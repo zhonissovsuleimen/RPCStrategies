@@ -4,9 +4,11 @@ namespace RPCStrategies.Strategies
 {
     internal class Random : AbstractStrategy
     {
-        public new void Pick()
+        public override void Pick()
         {
             Hand = GetRandomHand();
         }
+
+        public override void Play(Hand opponentHand) {}
     }
 }

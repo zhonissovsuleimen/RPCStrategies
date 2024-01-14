@@ -10,7 +10,7 @@ namespace RPCStrategies.Strategies
     {
         Hand OpponentsLastPick;
 
-        public new void Pick()
+        public override void Pick()
         {
             if (OpponentsLastPick == Hand.NOT_PICKED)
             {
@@ -21,7 +21,7 @@ namespace RPCStrategies.Strategies
             Hand = OpponentsLastPick;
         }
 
-        public new void Play(Hand opponentHand)
+        public override void Play(Hand opponentHand)
         {
             OpponentsLastPick = opponentHand;
         }

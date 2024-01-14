@@ -10,7 +10,7 @@ namespace RPCStrategies.Strategies
     {
         List<Hand> opponentHandHistory = new List<Hand>();
 
-        public new void Pick()
+        public override void Pick()
         {
             if (opponentHandHistory.Count == 0)
             {
@@ -22,7 +22,7 @@ namespace RPCStrategies.Strategies
             var randomIndex = random.Next(0, opponentHandHistory.Count);
             Hand = GetCounter(opponentHandHistory[randomIndex]);
         }
-        public new void Play(Hand opponentHand)
+        public override void Play(Hand opponentHand)
         {
             opponentHandHistory.Add(opponentHand);
         }

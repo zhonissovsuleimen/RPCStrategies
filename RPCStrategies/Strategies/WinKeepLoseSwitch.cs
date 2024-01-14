@@ -9,14 +9,14 @@ namespace RPCStrategies.Strategies
     internal class WinKeepLoseSwitch : AbstractStrategy
     {
         bool WonLastRound = false;
-        public new void Pick()
+        public override void Pick()
         {
             if (WonLastRound) { return; }
 
             Hand = GetRandomHand();
         }
 
-        public new void Play(Hand opponentHand)
+        public override void Play(Hand opponentHand)
         {
             WonLastRound = opponentHand switch
             {

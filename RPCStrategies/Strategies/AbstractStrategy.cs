@@ -11,8 +11,8 @@ namespace RPCStrategies.Strategies
     public abstract class AbstractStrategy
     {
         public Hand Hand { get; protected set; } = Hand.NOT_PICKED;
-        public void Pick() {}
-        public void Play(Hand opponentHand) {}
+        public abstract void Pick();
+        public abstract void Play(Hand opponentHand);
 
         protected Hand GetRandomHand()
         {
