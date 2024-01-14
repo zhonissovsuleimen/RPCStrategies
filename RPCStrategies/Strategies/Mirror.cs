@@ -30,5 +30,10 @@ namespace RPCStrategies.Strategies
                     }
             };
         }
+
+        public new void Play(Hand hand)
+        {
+            OpponentsLastPick = hand;
+        }
     }
 }
