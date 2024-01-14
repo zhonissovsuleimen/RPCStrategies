@@ -12,12 +12,22 @@ namespace RPCStrategies.Strategies
 
         public new void Pick()
         {
-            Hand = OpponentsLastPick switch
+            switch (OpponentsLastPick)
             {
-                Hand.ROCK => Hand.PAPER,
-                Hand.PAPER => Hand.SCISSORS,
-                Hand.SCISSORS => Hand.ROCK,
-                _ => Hand.NOT_PICKED,
+                case Hand.ROCK: Hand = Hand.PAPER; break;
+                case Hand.PAPER: Hand = Hand.SCISSORS; break;
+                case Hand.SCISSORS: Hand = Hand.ROCK; break;
+                default:
+                    {
+                        var random = new System.Random();
+                        Hand = random.Next(0, 3) switch
+                        {
+                            0 => Hand.ROCK,
+                            1 => Hand.PAPER,
+                            _ => Hand.SCISSORS,
+                        };
+                        break;
+                    }
             };
         }
     }
