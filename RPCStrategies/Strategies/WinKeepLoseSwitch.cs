@@ -13,13 +13,7 @@ namespace RPCStrategies.Strategies
         {
             if (WonLastRound) { return; }
 
-            var random = new System.Random();
-            Hand = random.Next(0, 3) switch
-            {
-                0 => Hand.ROCK,
-                1 => Hand.PAPER,
-                _ => Hand.SCISSORS,
-            };
+            Hand = GetRandomHand();
         }
 
         public new void Play(Hand opponentHand)
