@@ -52,10 +52,11 @@ namespace RPCStrategies.Tournament
 
                     Player1.Play(Player2.Hand);
                     Player2.Play(Player1.Hand);
-                }while (Player1.Hand != Player2.Hand);
+                }while (Player1.Hand == Player2.Hand);
+                count += Overtime.Last();
             }
 
-            player1Won = (count + Overtime.Last()) > 0;
+            player1Won = count > 0;
         }
 
         int GetIntOutcome(Hand hand1, Hand hand2)
@@ -74,6 +75,34 @@ namespace RPCStrategies.Tournament
             {
                 return -1;
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"Player 1: {Player1.GetType().Name}\n");
+            sb.Append($"Player 2: {Player2.GetType().Name}\n");
+            sb.Append($"Player 1 won: {player1Won}\n");
+            sb.Append($"Rounds: ");
+            for (int i = 0; i < Rounds.Length; i++)
+            {
+                string result = Rounds[i] > 0 ? "P1" : Rounds[i] < 0 ? "P2" : "TIE";
+                sb.Append($"{result}; ");
+            }
+            sb.Append("\n");
+
+            
+            if (Overtime.Count > 0)
+            {
+                sb.Append($"Overtime: ");
+                for (int i = 0; i < Overtime.Count; i++)
+                {
+                    string result = Overtime[i] > 0 ? "P1" : Overtime[i] < 0 ? "P2" : "TIE";
+                    sb.Append($"{result}; ");
+                }
+                sb.Append("\n");
+            }
+            return sb.ToString();
         }
     }
 }
