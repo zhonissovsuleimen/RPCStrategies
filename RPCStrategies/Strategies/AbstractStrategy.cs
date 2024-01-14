@@ -1,8 +1,16 @@
 namespace RPCStrategies.Strategies
 {
-    public abstract class AbstractStrategy : IStrategy
+    public enum Hand
     {
-        public Hand Hand = Hand.NOT_PICKED;
+        NOT_PICKED,
+        ROCK,
+        PAPER,
+        SCISSORS
+    }
+
+    public abstract class AbstractStrategy
+    {
+        public Hand Hand { get; protected set; } = Hand.NOT_PICKED;
         public void Pick() {}
         public void Play(Hand opponentHand) {}
 
