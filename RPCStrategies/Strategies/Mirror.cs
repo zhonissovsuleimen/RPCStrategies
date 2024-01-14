@@ -31,9 +31,9 @@ namespace RPCStrategies.Strategies
             };
         }
 
-        public new void Play(Hand hand)
+        public new void Play(Hand opponentHand)
         {
-            OpponentsLastPick = hand;
+            OpponentsLastPick = opponentHand;
         }
     }
 }

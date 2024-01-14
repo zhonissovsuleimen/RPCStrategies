@@ -4,6 +4,6 @@ namespace RPCStrategies.Strategies
     {
         public Hand Hand = Hand.NOT_PICKED;
         public void Pick() {}
-        public void Play(Hand hand) {}
+        public void Play(Hand opponentHand) {}
     }
 }

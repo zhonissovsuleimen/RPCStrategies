@@ -17,6 +17,6 @@ namespace RPCStrategies.Strategies
     internal interface IStrategy
     {
         public void Pick();
-        public void Play(Hand hand);
+        public void Play(Hand opponentHand);
     }
 }
