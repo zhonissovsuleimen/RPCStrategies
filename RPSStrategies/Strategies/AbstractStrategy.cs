@@ -1,4 +1,4 @@
-namespace RPCStrategies.Strategies
+namespace RPSStrategies.Strategies
 {
     public enum Hand
     {

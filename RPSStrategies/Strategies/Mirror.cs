@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPCStrategies.Strategies
+namespace RPSStrategies.Strategies
 {
-    internal class Counter : AbstractStrategy
+    internal class Mirror : AbstractStrategy
     {
         Hand OpponentsLastPick;
 
@@ -18,7 +18,7 @@ namespace RPCStrategies.Strategies
                 return;
             }
 
-            Hand = GetCounter(OpponentsLastPick);
+            Hand = OpponentsLastPick;
         }
 
         public override void Play(Hand opponentHand)

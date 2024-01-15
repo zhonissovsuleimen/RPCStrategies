@@ -1,6 +1,6 @@
 ﻿
 
-namespace RPCStrategies.Strategies
+namespace RPSStrategies.Strategies
 {
     internal class Random : AbstractStrategy
     {

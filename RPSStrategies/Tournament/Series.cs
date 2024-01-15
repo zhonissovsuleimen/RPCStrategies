@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RPCStrategies.Strategies;
+using RPSStrategies.Strategies;
 
-namespace RPCStrategies.Tournament
+namespace RPSStrategies.Tournament
 {
     internal class Series
     {
