@@ -10,5 +10,7 @@ namespace RPSStrategies.Strategies
         }
 
         public override void Play(Hand opponentHand) {}
+
+        public override void Reset() {}
     }
 }

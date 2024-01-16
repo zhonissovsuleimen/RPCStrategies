@@ -26,5 +26,10 @@ namespace RPSStrategies.Strategies
         {
             opponentHandHistory.Add(opponentHand);
         }
+
+        public override void Reset()
+        {
+            opponentHandHistory.Clear();
+        }
     }
 }

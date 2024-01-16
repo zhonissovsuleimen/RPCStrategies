@@ -25,5 +25,10 @@ namespace RPSStrategies.Strategies
         {
             OpponentsLastPick = opponentHand;
         }
+
+        public override void Reset()
+        {
+            OpponentsLastPick = Hand.NOT_PICKED;
+        }
     }
 }

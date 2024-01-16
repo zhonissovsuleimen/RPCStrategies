@@ -8,7 +8,7 @@ namespace RPSStrategies.Strategies
 {
     internal class Counter : AbstractStrategy
     {
-        Hand OpponentsLastPick;
+        Hand OpponentsLastPick = Hand.NOT_PICKED;
 
         public override void Pick()
         {
@@ -24,6 +24,11 @@ namespace RPSStrategies.Strategies
         public override void Play(Hand opponentHand)
         {
             OpponentsLastPick = opponentHand;
+        }
+
+        public override void Reset()
+        {
+            OpponentsLastPick = Hand.NOT_PICKED;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace RPSStrategies.Strategies
         public Hand Hand { get; protected set; } = Hand.NOT_PICKED;
         public abstract void Pick();
         public abstract void Play(Hand opponentHand);
+        public abstract void Reset();
 
         protected Hand GetRandomHand()
         {

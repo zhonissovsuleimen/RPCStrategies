@@ -26,5 +26,10 @@ namespace RPSStrategies.Strategies
                 _ => true
             };
         }
+
+        public override void Reset()
+        {
+            WonLastRound = false;
+        }
     }
 }
