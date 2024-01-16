@@ -37,6 +37,9 @@ namespace RPSStrategies.Tournament
 
         public void Play()
         {
+            Player1.Reset();
+            Player2.Reset();
+
             for (int i = 0; i < NumberOfRounds; i++)
             {
                 Player1.Pick();
