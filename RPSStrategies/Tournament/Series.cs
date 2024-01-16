@@ -7,22 +7,32 @@ using RPSStrategies.Strategies;
 
 namespace RPSStrategies.Tournament
 {
+    public enum Outcome
+    {
+        NOT_STARTED,
+        PLAYER1_WIN,
+        PLAYER2_WIN,
+        TIE
+    }
+
     internal class Series
     {
         public AbstractStrategy Player1 { get; init; }
         public AbstractStrategy Player2 { get; init; }
-        public bool player1Won;
+        public Outcome Outcome { get; private set; } = Outcome.NOT_STARTED;
 
         public int NumberOfRounds { get; init; }
         public int[] Rounds { get; init; }
+        public bool OvertimeEnabled { get; init; }
         public List<int> Overtime { get; } = new List<int>(); 
 
-        public Series(AbstractStrategy player1, AbstractStrategy player2, int numberOfRounds = 19)
+        public Series(AbstractStrategy player1, AbstractStrategy player2, int numberOfRounds = 19, bool overtimeEnabled = false)
         {
             Player1 = player1;
             Player2 = player2;
             NumberOfRounds = numberOfRounds;
             Rounds = new int[numberOfRounds];
+            OvertimeEnabled = overtimeEnabled;
         }
 
         public void Play()
@@ -39,24 +49,26 @@ namespace RPSStrategies.Tournament
             }
 
             int count = Rounds.Sum();
-
-            //sudden death overtime
-            if (count == 0)
+            if (OvertimeEnabled)
             {
-                do
-                {
-                    Player1.Pick();
-                    Player2.Pick();
-
-                    Overtime.Add(GetIntOutcome(Player1.Hand, Player2.Hand));
-
-                    Player1.Play(Player2.Hand);
-                    Player2.Play(Player1.Hand);
-                }while (Player1.Hand == Player2.Hand);
-                count += Overtime.Last();
+                Outcome = count > 0 ? Outcome.PLAYER1_WIN : count < 0 ? Outcome.PLAYER2_WIN : Outcome.TIE;
+                return;
             }
 
-            player1Won = count > 0;
+            do
+            {
+                Player1.Pick();
+                Player2.Pick();
+                
+                Overtime.Add(GetIntOutcome(Player1.Hand, Player2.Hand));
+
+                Player1.Play(Player2.Hand);
+                Player2.Play(Player1.Hand);
+
+            } while (Player1.Hand == Player2.Hand);
+
+            count += Overtime.Last();
+            Outcome = count > 0 ? Outcome.PLAYER1_WIN : Outcome.PLAYER2_WIN;
         }
 
         int GetIntOutcome(Hand hand1, Hand hand2)
@@ -82,7 +94,13 @@ namespace RPSStrategies.Tournament
             StringBuilder sb = new StringBuilder();
             sb.Append($"Player 1: {Player1.GetType().Name}\n");
             sb.Append($"Player 2: {Player2.GetType().Name}\n");
-            sb.Append($"Player 1 won: {player1Won}\n");
+            sb.Append($"Outcome: {Outcome.ToString()}\n");
+
+            if (Outcome == Outcome.NOT_STARTED)
+            {
+                return sb.ToString();
+            }
+
             sb.Append($"Rounds: ");
             for (int i = 0; i < Rounds.Length; i++)
             {
