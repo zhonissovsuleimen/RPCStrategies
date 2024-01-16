@@ -22,17 +22,19 @@ namespace RPSStrategies.Tournament
         public Outcome Outcome { get; private set; } = Outcome.NOT_STARTED;
 
         public int NumberOfRounds { get; init; }
-        public int[] Rounds { get; init; }
+        public (Hand, Hand)[] HandsHistory { get; init; }
+
         public bool OvertimeEnabled { get; init; }
-        public List<int> Overtime { get; } = new List<int>(); 
+        public List<(Hand, Hand)> OvertimeHandsHistory { get; } = new(); 
 
         public Series(AbstractStrategy player1, AbstractStrategy player2, int numberOfRounds = 19, bool overtimeEnabled = false)
         {
             Player1 = player1;
             Player2 = player2;
-            NumberOfRounds = numberOfRounds;
-            Rounds = new int[numberOfRounds];
             OvertimeEnabled = overtimeEnabled;
+
+            NumberOfRounds = numberOfRounds;
+            HandsHistory = new (Hand, Hand)[numberOfRounds];
         }
 
         public void Play()
@@ -45,51 +47,70 @@ namespace RPSStrategies.Tournament
                 Player1.Pick();
                 Player2.Pick();
 
-                Rounds[i] = GetIntOutcome(Player1.Hand, Player2.Hand);
+                HandsHistory[i] = (Player1.Hand, Player2.Hand);
 
                 Player1.Play(Player2.Hand);
                 Player2.Play(Player1.Hand);
             }
 
-            int count = Rounds.Sum();
-            if (OvertimeEnabled)
+            DecideOutcome();
+            if (!OvertimeEnabled)
             {
-                Outcome = count > 0 ? Outcome.PLAYER1_WIN : count < 0 ? Outcome.PLAYER2_WIN : Outcome.TIE;
                 return;
             }
 
+            //sudden death overtime
             do
             {
                 Player1.Pick();
                 Player2.Pick();
                 
-                Overtime.Add(GetIntOutcome(Player1.Hand, Player2.Hand));
+                OvertimeHandsHistory.Add((Player1.Hand, Player2.Hand));
 
                 Player1.Play(Player2.Hand);
                 Player2.Play(Player1.Hand);
 
             } while (Player1.Hand == Player2.Hand);
-
-            count += Overtime.Last();
-            Outcome = count > 0 ? Outcome.PLAYER1_WIN : Outcome.PLAYER2_WIN;
         }
 
-        int GetIntOutcome(Hand hand1, Hand hand2)
+        void DecideOutcome()
         {
-            if (hand1 == hand2)
+            int sum = 0;
+
+            if(OvertimeHandsHistory.Count == 0)
             {
-                return 0;
-            }
-            else if (hand1 == Hand.ROCK && hand2 == Hand.SCISSORS ||
-                     hand1 == Hand.PAPER && hand2 == Hand.ROCK ||
-                     hand1 == Hand.SCISSORS && hand2 == Hand.PAPER)
-            {
-                return 1;
+                foreach (var (p1, p2) in HandsHistory)
+                {
+                    int singleRound = p1 switch
+                    {
+                        _ when p1 == p2 => 0,
+                        Hand.ROCK => p2 == Hand.SCISSORS ? 1 : -1,
+                        Hand.PAPER => p2 == Hand.ROCK ? 1 : -1,
+                        Hand.SCISSORS => p2 == Hand.PAPER ? 1 : -1,
+                        _ => throw new Exception("Unexpected match outcome")
+                    };
+                    sum += singleRound;
+                }
             }
             else
             {
-                return -1;
+                var(p1, p2) = OvertimeHandsHistory[^1];
+                int decider = p1 switch
+                {
+                    Hand.ROCK => p2 == Hand.SCISSORS ? 1 : -1,
+                    Hand.PAPER => p2 == Hand.ROCK ? 1 : -1,
+                    Hand.SCISSORS => p2 == Hand.PAPER ? 1 : -1,
+                    _ => throw new Exception("Unexpected match outcome")
+                };
+                sum += decider;
             }
+
+            Outcome = sum switch
+            {
+                0 => Outcome.TIE,
+                > 0 => Outcome.PLAYER1_WIN,
+                < 0 => Outcome.PLAYER2_WIN
+            };
         }
 
         public override string ToString()
@@ -99,30 +120,6 @@ namespace RPSStrategies.Tournament
             sb.Append($"Player 2: {Player2.GetType().Name}\n");
             sb.Append($"Outcome: {Outcome.ToString()}\n");
 
-            if (Outcome == Outcome.NOT_STARTED)
-            {
-                return sb.ToString();
-            }
-
-            sb.Append($"Rounds: ");
-            for (int i = 0; i < Rounds.Length; i++)
-            {
-                string result = Rounds[i] > 0 ? "P1" : Rounds[i] < 0 ? "P2" : "TIE";
-                sb.Append($"{result}; ");
-            }
-            sb.Append("\n");
-
-            
-            if (Overtime.Count > 0)
-            {
-                sb.Append($"Overtime: ");
-                for (int i = 0; i < Overtime.Count; i++)
-                {
-                    string result = Overtime[i] > 0 ? "P1" : Overtime[i] < 0 ? "P2" : "TIE";
-                    sb.Append($"{result}; ");
-                }
-                sb.Append("\n");
-            }
             return sb.ToString();
         }
     }
